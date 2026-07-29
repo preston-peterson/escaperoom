@@ -12,6 +12,14 @@ import {
 import { Torch, Brazier, Glint } from './primitives/light.tsx';
 import { Fog, WaterPool } from './primitives/nature.tsx';
 import { Gear, Lever, GlyphPanel, Pedestal } from './primitives/mech.tsx';
+import {
+  Sea,
+  Tree,
+  ClockFace,
+  Pipes,
+  FloatingIsle,
+  Portal,
+} from './primitives/worlds.tsx';
 
 export const primitiveRegistry: Record<PrimitiveName, ComponentType<ArtProps>> = {
   stoneWall: StoneWall,
@@ -29,4 +37,10 @@ export const primitiveRegistry: Record<PrimitiveName, ComponentType<ArtProps>> =
   lever: Lever,
   glyphPanel: GlyphPanel,
   pedestal: Pedestal,
+  sea: Sea,
+  tree: Tree,
+  clockFace: ClockFace,
+  pipes: Pipes,
+  floatingIsle: FloatingIsle,
+  portal: Portal,
 };

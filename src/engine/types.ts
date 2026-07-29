@@ -29,7 +29,13 @@ export type PrimitiveName =
   | 'rubble'
   | 'lever'
   | 'pedestal'
-  | 'glint';
+  | 'glint'
+  | 'sea'
+  | 'tree'
+  | 'clockFace'
+  | 'pipes'
+  | 'floatingIsle'
+  | 'portal';
 
 // ---------------------------------------------------------------------------
 // Conditions & effects — the small DSL shared by scenes, hotspots, puzzles

@@ -20,7 +20,8 @@ export const worldRegistry: WorldMeta[] = [
     tagline:
       'Ruins above a grey sea, journals of the vanished, machines that still hum when the tide is right.',
     accent: '#4a7d8c',
-    locked: true,
+    locked: false,
+    load: () => import('./island/world.ts').then((m) => m.islandWorld),
   },
   {
     id: 'tower',
@@ -28,7 +29,8 @@ export const worldRegistry: WorldMeta[] = [
     tagline:
       'A vertical labyrinth of brass and steam — every floor a chamber of the same impossible clock.',
     accent: '#b87f33',
-    locked: true,
+    locked: false,
+    load: () => import('./tower/world.ts').then((m) => m.towerWorld),
   },
   {
     id: 'dream',
