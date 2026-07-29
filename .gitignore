@@ -1,0 +1,14 @@
+
+# --- pii-guard: maintainer-only docs + local secrets ---
+HANDOFF*.md
+AGENT_GUARDRAILS.md
+.env
+.env.*
+*.local.yaml
+config.local.*
+secrets.*
+
+# build/deps
+node_modules/
+dist/
+*.tsbuildinfo

@@ -1,0 +1,139 @@
+:root {
+  /* Cave palette — deep browns/umbers with ember-amber accent */
+  --bg: #0d0a08;
+  --bg-raised: #17110d;
+  --panel: #1d1610;
+  --panel-edge: #33261a;
+  --ink: #e8dcc8;
+  --ink-dim: #a08d72;
+  --ink-faint: #6b5c47;
+  --amber: #e0a458;
+  --amber-bright: #f5c97b;
+  --ember: #c9572a;
+  --water: #4a7d8c;
+  --moss: #6a7d4a;
+  --danger: #b5442c;
+  --shadow: rgba(0, 0, 0, 0.55);
+
+  --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Shared chrome ------------------------------------------------------- */
+
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.4rem;
+  border: 1px solid var(--panel-edge);
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--panel), var(--bg-raised));
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.btn:hover,
+.btn:focus-visible {
+  border-color: var(--amber);
+  color: var(--amber-bright);
+  box-shadow: 0 0 12px rgba(224, 164, 88, 0.25);
+  outline: none;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+  box-shadow: none;
+}
+
+.btn--primary {
+  border-color: var(--amber);
+  color: var(--amber-bright);
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 6px;
+  box-shadow: 0 8px 32px var(--shadow);
+}
+
+/* Scrollbars ---------------------------------------------------------- */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--panel-edge) transparent;
+}
+
+/* Focus --------------------------------------------------------------- */
+
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+/* SVG hotspots -------------------------------------------------------- */
+
+.hotspot {
+  fill: transparent;
+  stroke: transparent;
+  cursor: pointer;
+}
+
+.hotspot:hover,
+.hotspot:focus-visible {
+  fill: rgba(245, 201, 123, 0.08);
+  stroke: rgba(245, 201, 123, 0.5);
+  stroke-width: 2;
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
