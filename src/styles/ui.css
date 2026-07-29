@@ -182,6 +182,8 @@
   position: relative;
   width: 100%;
   height: 100%;
+  /* Quick fade on room entry: instant visual receipt that the click landed. */
+  animation: fadeIn 0.3s ease;
 }
 
 .scene-room-name {
@@ -264,17 +266,18 @@
 /* ===== Toasts ===== */
 
 .toasts {
+  /* Bottom-left column: persistent messages must never cover the
+     center-stage hotspots the player is aiming at. */
   position: fixed;
   bottom: 4.4rem;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 1rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.5rem;
   z-index: 40;
   pointer-events: none;
-  width: min(92vw, 620px);
+  width: min(46vw, 440px);
 }
 
 .toast {

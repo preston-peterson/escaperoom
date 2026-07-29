@@ -10,6 +10,7 @@ import { Toasts } from '../hud/Toasts.tsx';
 import { PuzzleOverlay } from '../puzzles/PuzzleOverlay.tsx';
 import { JournalPanel } from '../hud/JournalPanel.tsx';
 import { MenuOverlay } from '../hud/MenuOverlay.tsx';
+import { allowMove } from '../moveGuard.ts';
 
 /** Hosts map/scene views, HUD, overlays, and all store→UI side-channel wiring. */
 export function GameScreen() {
@@ -109,7 +110,9 @@ export function GameScreen() {
           <MapView
             state={state}
             world={world}
-            onMove={(passage) => dispatch({ type: 'MOVE', passage, at: Date.now() })}
+            onMove={(passage) => {
+              if (allowMove()) dispatch({ type: 'MOVE', passage, at: Date.now() });
+            }}
             onEnterRoom={() => setViewMode('scene')}
           />
         ) : (

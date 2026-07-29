@@ -57,7 +57,8 @@ export const useUiStore = create<UiStore>((set) => ({
   selectItem: (selectedItem) => set({ selectedItem }),
   pushToast: (kind, text) =>
     set((s) => ({
-      toasts: [...s.toasts.slice(-4), { id: ++toastCounter, kind, text }],
+      // Cap the stack at 3 — persistent toasts must not wall off the scene.
+      toasts: [...s.toasts.slice(-2), { id: ++toastCounter, kind, text }],
     })),
   dismissToast: (id) =>
     set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) })),

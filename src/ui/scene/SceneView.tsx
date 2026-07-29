@@ -2,6 +2,7 @@ import type { GameState, WorldDef } from '../../engine/types.ts';
 import { useGameStore } from '../../engine/state/store.ts';
 import { useUiStore } from '../../engine/state/uiStore.ts';
 import { SceneRenderer } from './SceneRenderer.tsx';
+import { allowMove } from '../moveGuard.ts';
 
 /** First-person view of the current chamber; routes hotspot clicks to actions. */
 export function SceneView({ state, world }: { state: GameState; world: WorldDef }) {
@@ -29,6 +30,11 @@ export function SceneView({ state, world }: { state: GameState; world: WorldDef 
           pushToast('narration', 'Something could fit here — if you carried the right thing.');
         }
         break;
+      case 'navigate':
+        if (allowMove()) {
+          dispatch({ type: 'INTERACT', hotspot: hotspotId, at: Date.now() });
+        }
+        break;
       default:
         dispatch({ type: 'INTERACT', hotspot: hotspotId, at: Date.now() });
         break;
@@ -36,7 +42,7 @@ export function SceneView({ state, world }: { state: GameState; world: WorldDef 
   };
 
   return (
-    <div className="scene-view">
+    <div className="scene-view" key={state.currentRoom}>
       <SceneRenderer scene={room.scene} state={state} world={world} onHotspot={onHotspot} />
       <div className="scene-room-name">{room.name}</div>
     </div>

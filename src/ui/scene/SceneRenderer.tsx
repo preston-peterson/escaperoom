@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useRef, type CSSProperties } from 'react';
 import type { GameState, SceneDef, SceneLayer, WorldDef } from '../../engine/types.ts';
 import { SCENE_H, SCENE_W } from '../../engine/types.ts';
 import { condHolds } from '../../engine/state/conditions.ts';
@@ -25,9 +25,9 @@ function LayerElement({ layer }: { layer: SceneLayer }) {
 }
 
 /**
- * Renders a SceneDef as layered SVG. Layers are grouped by parallax factor;
- * groups translate subtly against pointer movement (skipped for touch and
- * covered by the global reduced-motion rule).
+ * Renders a SceneDef as layered SVG. Layers are grouped by parallax factor.
+ * Parallax writes transforms straight to the DOM in a rAF — React never
+ * re-renders on pointer move, so clicks stay responsive.
  */
 export function SceneRenderer({
   scene,
@@ -40,17 +40,22 @@ export function SceneRenderer({
   world: WorldDef;
   onHotspot: (hotspotId: string) => void;
 }) {
-  const [offset, setOffset] = useState<[number, number]>([0, 0]);
+  const groupRefs = useRef<(SVGGElement | null)[]>([]);
+  const parallaxFactors = useRef<number[]>([]);
   const frame = useRef<number | null>(null);
+  const reducedMotion = useMemo(
+    () =>
+      typeof matchMedia !== 'undefined' &&
+      matchMedia('(prefers-reduced-motion: reduce)').matches,
+    [],
+  );
 
-  const onPointerMove = useCallback((e: React.PointerEvent<SVGSVGElement>) => {
-    if (e.pointerType === 'touch') return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const nx = (e.clientX - rect.left) / rect.width - 0.5;
-    const ny = (e.clientY - rect.top) / rect.height - 0.5;
-    if (frame.current !== null) cancelAnimationFrame(frame.current);
-    frame.current = requestAnimationFrame(() => setOffset([nx, ny]));
-  }, []);
+  useEffect(
+    () => () => {
+      if (frame.current !== null) cancelAnimationFrame(frame.current);
+    },
+    [],
+  );
 
   const liveLayers = scene.layers.filter((l) => condHolds(l.if, state));
 
@@ -62,6 +67,24 @@ export function SceneRenderer({
     if (last && last.parallax === p) last.layers.push(layer);
     else groups.push({ parallax: p, layers: [layer] });
   }
+  parallaxFactors.current = groups.map((g) => g.parallax);
+
+  const onPointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
+    if (reducedMotion || e.pointerType === 'touch' || frame.current !== null) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const nx = (e.clientX - rect.left) / rect.width - 0.5;
+    const ny = (e.clientY - rect.top) / rect.height - 0.5;
+    frame.current = requestAnimationFrame(() => {
+      frame.current = null;
+      parallaxFactors.current.forEach((p, i) => {
+        const g = groupRefs.current[i];
+        if (!g) return;
+        const dx = nx * (p - 0.35) * PARALLAX_STRENGTH;
+        const dy = ny * (p - 0.35) * PARALLAX_STRENGTH * 0.5;
+        g.style.transform = `translate(${dx}px, ${dy}px)`;
+      });
+    });
+  };
 
   return (
     <svg
@@ -80,11 +103,8 @@ export function SceneRenderer({
       {groups.map((group, i) => (
         <g
           key={i}
-          style={{
-            transform: `translate(${offset[0] * (group.parallax - 0.35) * PARALLAX_STRENGTH}px, ${
-              offset[1] * (group.parallax - 0.35) * PARALLAX_STRENGTH * 0.5
-            }px)`,
-            transition: 'transform 0.25s ease-out',
+          ref={(el) => {
+            groupRefs.current[i] = el;
           }}
         >
           {group.layers.map((layer, j) => (
