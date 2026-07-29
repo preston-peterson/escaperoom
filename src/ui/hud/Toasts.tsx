@@ -1,28 +1,29 @@
-import { useEffect } from 'react';
 import { useUiStore, type Toast } from '../../engine/state/uiStore.ts';
 
 function ToastCard({ toast }: { toast: Toast }) {
   const dismissToast = useUiStore((s) => s.dismissToast);
-  useEffect(() => {
-    const t = setTimeout(
-      () => dismissToast(toast.id),
-      toast.kind === 'achievement' ? 6000 : 4600,
-    );
-    return () => clearTimeout(t);
-  }, [toast.id, toast.kind, dismissToast]);
   return (
     <div
       className={`toast${toast.kind === 'achievement' ? ' toast--achievement' : ''}`}
       role="status"
-      onClick={() => dismissToast(toast.id)}
     >
       {toast.kind === 'achievement' && <span className="toast-star">✦</span>}
-      {toast.text}
+      <span className="toast-text">{toast.text}</span>
+      <button
+        className="toast-close"
+        aria-label="Dismiss message"
+        onClick={() => dismissToast(toast.id)}
+      >
+        ✕
+      </button>
     </div>
   );
 }
 
-/** Narration + achievement toasts, bottom-center, newest last. */
+/**
+ * Narration + achievement messages, bottom-center, newest last. Messages stay
+ * on screen until dismissed with the ✕ so nothing scrolls away unread.
+ */
 export function Toasts() {
   const toasts = useUiStore((s) => s.toasts);
   return (

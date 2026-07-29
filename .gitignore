@@ -12,3 +12,6 @@ secrets.*
 node_modules/
 dist/
 *.tsbuildinfo
+
+# graphify generated output
+graphify-out/
