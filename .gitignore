@@ -15,3 +15,17 @@ dist/
 
 # graphify generated output
 graphify-out/
+
+# audit reports (local-only)
+audits/
+
+# OS / editor clutter
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# npm debug logs
+npm-debug.log*

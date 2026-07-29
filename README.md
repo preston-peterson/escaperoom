@@ -8,6 +8,8 @@ and solve interlocking mechanisms that physically rearrange the maze around you.
 Fully client-side — no backend, no image or audio assets. All art is layered
 SVG; all sound is synthesized WebAudio.
 
+**Play it now:** https://preston-peterson.github.io/escaperoom/
+
 ## Play
 
 ```sh
