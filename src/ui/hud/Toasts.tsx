@@ -3,26 +3,21 @@ import { useUiStore, type Toast } from '../../engine/state/uiStore.ts';
 function ToastCard({ toast }: { toast: Toast }) {
   const dismissToast = useUiStore((s) => s.dismissToast);
   return (
-    <div
+    <button
       className={`toast${toast.kind === 'achievement' ? ' toast--achievement' : ''}`}
-      role="status"
+      title="Click to dismiss"
+      onClick={() => dismissToast(toast.id)}
     >
       {toast.kind === 'achievement' && <span className="toast-star">✦</span>}
       <span className="toast-text">{toast.text}</span>
-      <button
-        className="toast-close"
-        aria-label="Dismiss message"
-        onClick={() => dismissToast(toast.id)}
-      >
-        ✕
-      </button>
-    </div>
+    </button>
   );
 }
 
 /**
- * Narration + achievement messages, bottom-center, newest last. Messages stay
- * on screen until dismissed with the ✕ so nothing scrolls away unread.
+ * Narration + achievement messages, bottom-left, newest last. Messages stay
+ * on screen until clicked — anywhere on the box dismisses it, and nothing
+ * ever scrolls away unread.
  */
 export function Toasts() {
   const toasts = useUiStore((s) => s.toasts);
