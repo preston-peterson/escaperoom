@@ -20,6 +20,16 @@ import {
   FloatingIsle,
   Portal,
 } from './primitives/worlds.tsx';
+import {
+  PanelWall,
+  WindowPane,
+  Furniture,
+  PortraitFrame,
+  Chandelier,
+  CurtainStage,
+  PaperScrap,
+  BodyOutline,
+} from './primitives/interior.tsx';
 
 export const primitiveRegistry: Record<PrimitiveName, ComponentType<ArtProps>> = {
   stoneWall: StoneWall,
@@ -43,4 +53,12 @@ export const primitiveRegistry: Record<PrimitiveName, ComponentType<ArtProps>> =
   pipes: Pipes,
   floatingIsle: FloatingIsle,
   portal: Portal,
+  panelWall: PanelWall,
+  windowPane: WindowPane,
+  furniture: Furniture,
+  portraitFrame: PortraitFrame,
+  chandelier: Chandelier,
+  curtainStage: CurtainStage,
+  paperScrap: PaperScrap,
+  bodyOutline: BodyOutline,
 };

@@ -48,6 +48,13 @@ export function validate(def: PuzzleDef, sub: PuzzleSubmission): ValidationResul
       const allFilled = def.sockets.every((s) => placements[s.id] === s.accepts);
       return { correct: allFilled };
     }
+    case 'accusation': {
+      const choices = (sub as { choices: string[] }).choices;
+      if (choices.length !== def.categories.length) return { correct: false };
+      if (arraysEqual(choices, def.answer)) return { correct: true };
+      // One fixed rebuke for every wrong triple — no per-slot hints to farm.
+      return { correct: false, feedback: def.wrongFeedback };
+    }
   }
 }
 

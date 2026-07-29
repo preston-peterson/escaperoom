@@ -100,6 +100,36 @@ describe('rotary', () => {
   });
 });
 
+describe('accusation', () => {
+  const def: PuzzleDef = {
+    ...base,
+    id: 'acc',
+    type: 'accusation',
+    categories: [
+      { id: 'who', label: 'The Accused', options: [{ id: 's1', label: 'A' }, { id: 's2', label: 'B' }, { id: 's3', label: 'C' }] },
+      { id: 'how', label: 'The Means', options: [{ id: 'm1', label: 'D' }, { id: 'm2', label: 'E' }, { id: 'm3', label: 'F' }] },
+      { id: 'where', label: 'The Scene', options: [{ id: 'p1', label: 'G' }, { id: 'p2', label: 'H' }, { id: 'p3', label: 'I' }] },
+    ],
+    answer: ['s2', 'm1', 'p3'],
+    wrongFeedback: 'The room does not believe you.',
+  };
+  it('accepts the exact triple', () => {
+    expect(validate(def, { type: 'accusation', choices: ['s2', 'm1', 'p3'] }).correct).toBe(true);
+  });
+  it('rejects any wrong triple with the single fixed rebuke', () => {
+    const r = validate(def, { type: 'accusation', choices: ['s1', 'm1', 'p3'] });
+    expect(r.correct).toBe(false);
+    expect(r.feedback).toBe('The room does not believe you.');
+    // even two-of-three gets the same feedback — no per-slot hints
+    const r2 = validate(def, { type: 'accusation', choices: ['s2', 'm1', 'p1'] });
+    expect(r2.feedback).toBe('The room does not believe you.');
+  });
+  it('rejects wrong arity and mismatched submission type', () => {
+    expect(validate(def, { type: 'accusation', choices: ['s2', 'm1'] }).correct).toBe(false);
+    expect(validate(def, { type: 'cipher', text: 's2 m1 p3' }).correct).toBe(false);
+  });
+});
+
 describe('itemPlacement', () => {
   const def: PuzzleDef = {
     ...base,

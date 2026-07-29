@@ -5,6 +5,7 @@ import { CipherPuzzle } from './CipherPuzzle.tsx';
 import { SequencePuzzle } from './SequencePuzzle.tsx';
 import { RotaryPuzzle } from './RotaryPuzzle.tsx';
 import { ItemPlacementPuzzle } from './ItemPlacementPuzzle.tsx';
+import { AccusationPuzzle } from './AccusationPuzzle.tsx';
 
 export interface PuzzleUiProps<T extends PuzzleDef['type'] = PuzzleDef['type']> {
   def: Extract<PuzzleDef, { type: T }>;
@@ -18,4 +19,5 @@ export const puzzleUiRegistry: Record<PuzzleDef['type'], ComponentType<any>> = {
   sequence: SequencePuzzle,
   rotary: RotaryPuzzle,
   itemPlacement: ItemPlacementPuzzle,
+  accusation: AccusationPuzzle,
 };

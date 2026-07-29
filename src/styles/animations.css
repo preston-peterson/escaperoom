@@ -144,6 +144,16 @@
   }
 }
 
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-2.2deg);
+  }
+  50% {
+    transform: rotate(2.2deg);
+  }
+}
+
 @keyframes bob {
   0%,
   100% {

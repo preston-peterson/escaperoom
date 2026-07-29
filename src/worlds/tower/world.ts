@@ -22,6 +22,7 @@ export const towerWorld: WorldDef = {
   achievements,
   map,
   finalPuzzle: 'pz_orrery',
+  journalLabels: { lore: "The Horologist's Notes" },
   epilogue:
     'You let go of the brake. The orrery takes up its own weight — sun-lamp kindling, moon ring finding its rail, the wanderers spreading out along their courses like a hand opening. Underfoot, floor by floor, the tower catches: the spring paying out its patient thunder, the governor finding its spin, the great pendulum taking its first long breath in years. Every clock on every floor starts at once — six minutes to midnight, and counting. The tower is wound. The sky is keeping.',
   loreEpilogue:

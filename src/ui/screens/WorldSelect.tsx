@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { WorldMeta } from '../../engine/types.ts';
-import { worldRegistry } from '../../worlds/index.ts';
+import { actRegistry, worldRegistry } from '../../worlds/index.ts';
 import { useGameStore } from '../../engine/state/store.ts';
 import { useUiStore } from '../../engine/state/uiStore.ts';
 import { loadGame, loadSettings } from '../../engine/save/persistence.ts';
@@ -51,9 +51,15 @@ export function WorldSelect() {
 
   return (
     <div className="world-select">
-      <h1>Choose your descent</h1>
-      <div className="world-cards">
-        {worldRegistry.map((meta) => (
+      <h1>The Atlas</h1>
+      {actRegistry.map((act) => (
+        <section key={act.id} className="world-act">
+          <h2 className="world-act-title">{act.title}</h2>
+          <p className="world-act-tagline">{act.tagline}</p>
+          <div className="world-cards">
+            {worldRegistry
+              .filter((meta) => meta.act === act.id)
+              .map((meta) => (
           <div
             key={meta.id}
             className={`world-card panel${meta.locked ? ' world-card--locked' : ''}${
@@ -96,8 +102,10 @@ export function WorldSelect() {
               </div>
             )}
           </div>
-        ))}
-      </div>
+              ))}
+          </div>
+        </section>
+      ))}
     </div>
   );
 }

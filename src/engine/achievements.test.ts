@@ -51,6 +51,34 @@ describe('achievementMet', () => {
   });
 });
 
+describe('puzzleFirstTry', () => {
+  const def = {
+    id: 'a_first',
+    title: 'First',
+    description: 'No wrong guesses.',
+    check: 'puzzleFirstTry',
+    puzzle: 'pz_dial',
+  } as const;
+  it('requires solved with zero failed attempts', () => {
+    const s = wonState('relaxed', 1000);
+    const clean = {
+      ...s,
+      puzzles: { ...s.puzzles, pz_dial: { solved: true, hintsUsed: 0 as const, attempts: 0 } },
+    };
+    expect(achievementMet(def, clean, miniWorld, 0)).toBe(true);
+    const missed = {
+      ...s,
+      puzzles: { ...s.puzzles, pz_dial: { solved: true, hintsUsed: 0 as const, attempts: 2 } },
+    };
+    expect(achievementMet(def, missed, miniWorld, 0)).toBe(false);
+    const unsolved = {
+      ...s,
+      puzzles: { ...s.puzzles, pz_dial: { solved: false, hintsUsed: 0 as const, attempts: 0 } },
+    };
+    expect(achievementMet(def, unsolved, miniWorld, 0)).toBe(false);
+  });
+});
+
 describe('evaluateAchievements', () => {
   it('stamps new achievements once and never re-awards', () => {
     const s = wonState('relaxed', 1000);

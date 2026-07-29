@@ -22,6 +22,7 @@ export const dreamWorld: WorldDef = {
   achievements,
   map,
   finalPuzzle: 'pz_wake',
+  journalLabels: { lore: "The Draughtsman's Notes" },
   epilogue:
     'The last note is the first note played home again, and the pale door does not so much open as stop being closed. Morning comes through it sideways, the way light enters water. Around you the dream folds itself neatly — gardens, stairs, seas, and all — finished at last, and puts itself away like a letter into an envelope. Somewhere very near and very far, the Sleeper takes one deeper breath, and opens her eyes.',
   loreEpilogue:

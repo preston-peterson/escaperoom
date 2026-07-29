@@ -63,6 +63,28 @@
   font-size: clamp(1.6rem, 3.5vw, 2.6rem);
 }
 
+.world-act {
+  max-width: 1200px;
+  margin: 0 auto 2.6rem;
+  text-align: left;
+}
+
+.world-act-title {
+  color: var(--amber);
+  font-size: 1.25rem;
+  letter-spacing: 0.12em;
+  border-bottom: 1px solid var(--panel-edge);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.world-act-tagline {
+  color: var(--ink-faint);
+  font-style: italic;
+  font-size: 0.92rem;
+  margin-bottom: 1.2rem;
+}
+
 .world-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -131,6 +153,65 @@
   gap: 0.6rem;
   padding: 0 1.4rem 1.4rem;
   animation: fadeIn 0.3s ease;
+}
+
+/* ===== Accusation finale ===== */
+
+.accusation-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+
+.accusation-category {
+  border: 1px solid var(--panel-edge);
+  border-radius: 8px;
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.accusation-category legend {
+  color: var(--ink-dim);
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0 0.4rem;
+}
+
+.accusation-option {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--ink);
+  font-family: var(--font-display);
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.accusation-option:hover {
+  border-color: var(--panel-edge);
+}
+
+.accusation-option--chosen {
+  border-color: var(--danger);
+  background: rgba(181, 68, 44, 0.14);
+  color: var(--amber-bright);
+}
+
+.accusation-submit {
+  border-color: var(--danger);
+  color: var(--ink);
+  font-size: 1.05rem;
+  padding: 0.75rem 2.2rem;
+}
+
+.accusation-submit:not(:disabled):hover {
+  border-color: var(--danger);
+  color: var(--amber-bright);
+  box-shadow: 0 0 14px rgba(181, 68, 44, 0.45);
 }
 
 /* ===== Game screen ===== */

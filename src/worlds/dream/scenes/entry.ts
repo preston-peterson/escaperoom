@@ -22,6 +22,11 @@ export function thresholdScene(): SceneDef {
       sketchLine(380, 250, 380, 420, 4, { opacity: 0.2 }),
       sketchLine(960, 240, 1120, 240, 4, { opacity: 0.3 }),
       ...door.layers,
+      // draw the eye to the knocker until the door has been answered
+      {
+        kind: 'primitive', primitive: 'glint', x: 875, y: 428, scale: 1.1, parallax: 0.15,
+        if: { not: { flag: 'doorAnswered' } },
+      },
       ...dreamFrame(),
     ],
     hotspots: [

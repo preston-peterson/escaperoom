@@ -30,6 +30,10 @@ export function achievementMet(
       );
     case 'secretFound':
       return state.secretsFound.includes(def.secretId);
+    case 'puzzleFirstTry': {
+      const ps = state.puzzles[def.puzzle];
+      return ps?.solved === true && ps.attempts === 0;
+    }
   }
 }
 

@@ -22,6 +22,7 @@ export const labyrinthWorld: WorldDef = {
   achievements,
   map,
   finalPuzzle: 'pz_heart',
+  journalLabels: { lore: "Vell's Notes" },
   epilogue:
     'The Ember takes your breath and blooms — not into a blaze, but into a steady, patient burning, like a heart settling into rhythm. All around you, in walls and floors and further than hearing, the labyrinth answers it: gears taking up their turning, water finding its channels, chime-stones humming one long note. The maze breathes out, and a way opens upward, and the mountain lets you go.',
   loreEpilogue:

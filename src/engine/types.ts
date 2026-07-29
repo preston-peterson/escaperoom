@@ -35,7 +35,15 @@ export type PrimitiveName =
   | 'clockFace'
   | 'pipes'
   | 'floatingIsle'
-  | 'portal';
+  | 'portal'
+  | 'panelWall'
+  | 'windowPane'
+  | 'furniture'
+  | 'portraitFrame'
+  | 'chandelier'
+  | 'curtainStage'
+  | 'paperScrap'
+  | 'bodyOutline';
 
 // ---------------------------------------------------------------------------
 // Conditions & effects — the small DSL shared by scenes, hotspots, puzzles
@@ -204,6 +212,19 @@ export type PuzzleDef = PuzzleBase &
         type: 'itemPlacement';
         sockets: { id: string; label: string; accepts: ItemId }[];
       }
+    | {
+        type: 'accusation';
+        /** e.g. The Accused / The Means / The Scene, each with its own options. */
+        categories: {
+          id: string;
+          label: string;
+          options: { id: string; label: string }[];
+        }[];
+        /** One option id per category, in category order. */
+        answer: string[];
+        /** Single fixed rebuke for any wrong triple — never hints which slot missed. */
+        wrongFeedback: string;
+      }
   );
 
 export type PuzzleSubmission =
@@ -211,7 +232,8 @@ export type PuzzleSubmission =
   | { type: 'cipher'; text: string }
   | { type: 'sequence'; order: string[] }
   | { type: 'rotary'; positions: number[] }
-  | { type: 'itemPlacement'; placements: Record<string, ItemId> };
+  | { type: 'itemPlacement'; placements: Record<string, ItemId> }
+  | { type: 'accusation'; choices: string[] };
 
 export interface ValidationResult {
   correct: boolean;
@@ -251,11 +273,13 @@ export interface ItemDef {
   icon: PrimitiveName;
 }
 
+export type JournalCategory = 'lore' | 'clue' | 'mechanism' | 'suspect';
+
 export interface JournalEntryDef {
   id: JournalId;
   title: string;
   body: string;
-  category: 'lore' | 'clue' | 'mechanism';
+  category: JournalCategory;
   countsTowardLore?: boolean;
 }
 
@@ -271,6 +295,7 @@ export type AchievementDef = {
   | { check: 'allRoomsVisited' }
   | { check: 'allJournal' }
   | { check: 'secretFound'; secretId: string }
+  | { check: 'puzzleFirstTry'; puzzle: PuzzleId }
 );
 
 // ---------------------------------------------------------------------------
@@ -297,6 +322,8 @@ export interface WorldDef {
   /** Extra epilogue paragraph when all lore journal entries were found. */
   loreEpilogue?: string;
   epilogue: string;
+  /** Per-world overrides for journal section headers (e.g. "Dossiers"). */
+  journalLabels?: Partial<Record<JournalCategory, string>>;
 }
 
 export interface WorldMeta {
@@ -305,6 +332,8 @@ export interface WorldMeta {
   tagline: string;
   accent: string;
   locked: boolean;
+  /** Which shelf of the world select this belongs to (see actRegistry). */
+  act: string;
   load?: () => Promise<WorldDef>;
 }
 

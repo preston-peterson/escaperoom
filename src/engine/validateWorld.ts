@@ -151,7 +151,40 @@ export function validateWorld(world: WorldDef): string[] {
         break;
       case 'cipher':
         break;
+      case 'accusation': {
+        if (puzzle.answer.length !== puzzle.categories.length)
+          err(`${ctx}: answer length != categories`);
+        puzzle.categories.forEach((cat, i) => {
+          const ids = new Set<string>();
+          cat.options.forEach((o) => {
+            if (ids.has(o.id)) err(`${ctx}: duplicate option id ${o.id} in ${cat.id}`);
+            ids.add(o.id);
+          });
+          if (cat.options.length < 3)
+            err(`${ctx}: category ${cat.id} needs >= 3 options`);
+          if (puzzle.answer[i] !== undefined && !ids.has(puzzle.answer[i]))
+            err(`${ctx}: answer ${puzzle.answer[i]} not an option of ${cat.id}`);
+        });
+        // Evidence grounding: every answer option's label must be discoverable
+        // in the journal — the accusation may never hinge on facts the world
+        // doesn't contain.
+        const journalText = Object.values(world.journal)
+          .map((j) => `${j.title}\n${j.body}`)
+          .join('\n')
+          .toLowerCase();
+        puzzle.categories.forEach((cat, i) => {
+          const opt = cat.options.find((o) => o.id === puzzle.answer[i]);
+          if (opt && !journalText.includes(opt.label.toLowerCase()))
+            err(`${ctx}: answer label "${opt.label}" appears in no journal entry`);
+        });
+        break;
+      }
     }
+  }
+
+  for (const ach of world.achievements) {
+    if (ach.check === 'puzzleFirstTry' && !has.puzzle(ach.puzzle))
+      err(`achievement ${ach.id}: references missing puzzle ${ach.puzzle}`);
   }
 
   for (const shift of Object.values(world.shifts)) {

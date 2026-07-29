@@ -1,12 +1,14 @@
 import { useState } from 'react';
+import type { JournalCategory } from '../../engine/types.ts';
 import { useGameStore } from '../../engine/state/store.ts';
 import { useUiStore } from '../../engine/state/uiStore.ts';
 
-const CATEGORY_LABELS = {
-  lore: "Vell's Notes",
+const DEFAULT_LABELS: Record<JournalCategory, string> = {
+  suspect: 'Persons of Interest',
   clue: 'Observations',
   mechanism: 'Mechanisms',
-} as const;
+  lore: 'Recovered Writings',
+};
 
 /** The explorer's journal: everything discovered so far, grouped and readable. */
 export function JournalPanel() {
@@ -17,7 +19,7 @@ export function JournalPanel() {
 
   if (!world) return null;
 
-  const byCategory = (['clue', 'mechanism', 'lore'] as const).map((cat) => ({
+  const byCategory = (['suspect', 'clue', 'mechanism', 'lore'] as const).map((cat) => ({
     cat,
     items: entries
       .map((e) => world.journal[e.id])
@@ -47,7 +49,7 @@ export function JournalPanel() {
             ({ cat, items }) =>
               items.length > 0 && (
                 <section key={cat} className="journal-section">
-                  <h3>{CATEGORY_LABELS[cat]}</h3>
+                  <h3>{world.journalLabels?.[cat] ?? DEFAULT_LABELS[cat]}</h3>
                   <ul>
                     {items.map((def) => (
                       <li key={def.id}>

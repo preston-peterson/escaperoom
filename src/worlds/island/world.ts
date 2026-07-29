@@ -22,6 +22,7 @@ export const islandWorld: WorldDef = {
   achievements,
   map,
   finalPuzzle: 'pz_quieting',
+  journalLabels: { lore: "Maren's Letters" },
   epilogue:
     'The gate does not open so much as unclench. Warm air moves through it — warm, down here — and the attentive dark behind the ring becomes only darkness, ordinary and asleep. Above you the engine turns, the bay rocks in its cradle of stone, and the island is quiet at last in the way a house is quiet when the child has finally gone down. When you climb back into the daylight, the skiff is riding high at the jetty, and the tide is fair for home.',
   loreEpilogue:
