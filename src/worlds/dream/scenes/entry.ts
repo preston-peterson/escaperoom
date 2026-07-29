@@ -7,6 +7,9 @@ export function thresholdScene(): SceneDef {
     scale: 1.1,
     groundY: 680,
     openIf: { flag: 'doorAnswered' },
+    // Until the knock is answered, the knocker is the door's only interaction —
+    // otherwise this navigate hotspot sits on top of it and eats the hover.
+    if: { flag: 'doorAnswered' },
   });
   return {
     palette: 'dreamviolet',
