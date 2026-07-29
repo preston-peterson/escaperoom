@@ -8,10 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Two new worlds: **The Silent Island** (tide-driven Myst-like island — restart
-  the Wardens' Tidal Engine before the Undertow wakes) and **The Orrery Tower**
-  (vertical brass clockwork — rotate the frozen floors back into alignment and
-  rewind the sky). Each: 12 rooms, all five puzzle types, secrets, journal,
+- Three new worlds — all four descents now open:
+  **The Silent Island** (tide-driven Myst-like island — restart the Wardens'
+  Tidal Engine before the Undertow wakes), **The Orrery Tower** (vertical
+  brass clockwork — rotate the frozen floors back into alignment and rewind
+  the sky), and **The Unfinished Dream** (a stalled dream whose doors get
+  rewired mid-game — gather the ideas the last room needs and sing the
+  Sleeper awake). Each: 11–12 rooms, all five puzzle types, secrets, journal,
   achievements, and its own golden-walkthrough test.
 - Six new scene primitives (sea, tree, clock face, pipes, floating isle,
   portal) and six palettes for the new worlds.

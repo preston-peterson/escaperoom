@@ -38,6 +38,7 @@ export const worldRegistry: WorldMeta[] = [
     tagline:
       'Stairs that climb into themselves, doors that open yesterday. The maze that does not believe in maps.',
     accent: '#7d6a9e',
-    locked: true,
+    locked: false,
+    load: () => import('./dream/world.ts').then((m) => m.dreamWorld),
   },
 ];
