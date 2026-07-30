@@ -20,7 +20,17 @@ export function TitleScreen() {
           fill="#050302"
         />
         <rect width="1600" height="900" fill="url(#title-glow)" />
-        <circle cx="800" cy="740" r="10" fill="#e0a458" style={{ animation: 'glintPulse 3s ease-in-out infinite' }} />
+        <circle
+          cx="800"
+          cy="740"
+          r="10"
+          fill="#e0a458"
+          style={{
+            animation: 'glintPulse 3s ease-in-out infinite',
+            transformBox: 'fill-box',
+            transformOrigin: 'center',
+          }}
+        />
       </svg>
       <div className="title-content">
         <p className="title-kicker">Escape the</p>

@@ -205,7 +205,8 @@ export const passages: Record<PassageId, PassageDef> = {
 };
 
 export const map: MapLayout = {
-  viewBox: [0, 0, 1000, 800],
+  // Bottom margin leaves room for the lowest room's name label.
+  viewBox: [0, 0, 1000, 840],
   rooms: {
     dock: { x: 500, y: 715, shape: 'square' },
     seacave: { x: 310, y: 730, shape: 'square', w: 80, h: 80 },

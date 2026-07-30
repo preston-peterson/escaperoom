@@ -172,7 +172,13 @@ export function MapView({
                   cy={layout.y}
                   r={13}
                   fill="var(--amber)"
-                  style={{ animation: 'glintPulse 2.2s ease-in-out infinite' }}
+                  style={{
+                    animation: 'glintPulse 2.2s ease-in-out infinite',
+                    // Without these the pulse scales from the SVG origin and
+                    // walks the token off its room.
+                    transformBox: 'fill-box',
+                    transformOrigin: 'center',
+                  }}
                 />
               )}
               <text

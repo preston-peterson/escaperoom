@@ -225,7 +225,15 @@ export function Portal({ props }: ArtProps) {
         stroke={open ? 'var(--p-glow)' : 'var(--p-accent)'}
         strokeWidth={7}
         opacity={open ? 0.95 : 0.5}
-        style={open ? { animation: 'glintPulse 4s ease-in-out infinite' } : undefined}
+        style={
+          open
+            ? {
+                animation: 'glintPulse 4s ease-in-out infinite',
+                transformBox: 'fill-box',
+                transformOrigin: 'center',
+              }
+            : undefined
+        }
       />
       <ellipse cx={r} cy={r * 1.3} rx={r * 0.86} ry={r * 1.26} fill="none" stroke={open ? 'var(--p-glow)' : 'var(--p-accent)'} strokeWidth={2} opacity={0.35} />
     </g>

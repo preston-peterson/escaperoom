@@ -84,7 +84,13 @@ export function Brazier({ props }: ArtProps) {
 export function Glint({ props }: ArtProps) {
   const r = num(props, 'r', 9);
   return (
-    <g style={{ animation: 'glintPulse 2.6s ease-in-out infinite' }}>
+    <g
+      style={{
+        animation: 'glintPulse 2.6s ease-in-out infinite',
+        transformBox: 'fill-box',
+        transformOrigin: 'center',
+      }}
+    >
       <path
         d={`M 20 ${20 - r * 1.8} L ${20 + r * 0.4} ${20 - r * 0.4} L ${20 + r * 1.8} 20
           L ${20 + r * 0.4} ${20 + r * 0.4} L 20 ${20 + r * 1.8} L ${20 - r * 0.4} ${20 + r * 0.4}

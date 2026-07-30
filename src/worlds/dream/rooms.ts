@@ -245,7 +245,8 @@ export const passages: Record<PassageId, PassageDef> = {
  * passages curving the long way round. Readable, but only just polite.
  */
 export const map: MapLayout = {
-  viewBox: [0, 0, 1000, 800],
+  // Bottom margin leaves room for the lowest room's name label.
+  viewBox: [0, 0, 1000, 850],
   rooms: {
     threshold: { x: 505, y: 735, shape: 'square' },
     hall: { x: 460, y: 585, shape: 'hex', w: 118 },
