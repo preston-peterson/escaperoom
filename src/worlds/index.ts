@@ -71,8 +71,9 @@ export const worldRegistry: WorldMeta[] = [
     tagline:
       'A financier dead behind a locked study door, and the blizzard that let everyone but the truth escape.',
     accent: '#b0413e',
-    locked: true,
+    locked: false,
     act: 'casebook',
+    load: () => import('./manor/world.ts').then((m) => m.manorWorld),
   },
   {
     id: 'liner',
@@ -98,7 +99,8 @@ export const worldRegistry: WorldMeta[] = [
     tagline:
       'A colonel dead behind a latched sleeper door, and a night train whose cars will not stay in order.',
     accent: '#4a5d8c',
-    locked: true,
+    locked: false,
     act: 'casebook',
+    load: () => import('./express/world.ts').then((m) => m.expressWorld),
   },
 ];

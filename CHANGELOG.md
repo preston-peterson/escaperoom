@@ -8,6 +8,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Act II: The Casebook** — the atlas gains a second shelf of whodunit
+  mysteries. Aftermath-style: the cast is gone; you reconstruct the crime
+  from dossiers, evidence, and abandoned rooms, ending in a who/how/where
+  accusation that the engine refuses until the keystone evidence is found.
+  First two cases open: **The Longwinter House** (a financier dead behind a
+  locked study door in a snowbound manor) and **The Sable Express** (a
+  colonel dead behind a latched sleeper door on a night train whose cars
+  reorder mid-case). Two more cases — The Meridian and The Gilded Curtain —
+  are sealed, coming next.
+- Accusation puzzle type, dossier journal category with per-world case-file
+  labels, first-try-deduction achievement, eight interior scene primitives,
+  and six new palettes.
+
+### Fixed
+- The Unfinished Dream's threshold: the lone door's hotspot covered the
+  brass knocker (unfindable way in); the knocker now glints and owns the
+  door until answered.
+
+### Added
 - Three new worlds — all four descents now open:
   **The Silent Island** (tide-driven Myst-like island — restart the Wardens'
   Tidal Engine before the Undertow wakes), **The Orrery Tower** (vertical
