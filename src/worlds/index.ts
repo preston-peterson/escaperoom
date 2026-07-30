@@ -81,8 +81,9 @@ export const worldRegistry: WorldMeta[] = [
     tagline:
       'Mid-crossing, a courier vanishes between decks. Days from any shore, the ship keeps her secrets below.',
     accent: '#3f8f8a',
-    locked: true,
+    locked: false,
     act: 'casebook',
+    load: () => import('./liner/world.ts').then((m) => m.linerWorld),
   },
   {
     id: 'theater',
@@ -90,8 +91,9 @@ export const worldRegistry: WorldMeta[] = [
     tagline:
       'On opening night the lead falls through the trapdoor and does not rise. The building itself is stagecraft.',
     accent: '#c04848',
-    locked: true,
+    locked: false,
     act: 'casebook',
+    load: () => import('./theater/world.ts').then((m) => m.theaterWorld),
   },
   {
     id: 'express',

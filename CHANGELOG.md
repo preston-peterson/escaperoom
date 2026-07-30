@@ -12,11 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   mysteries. Aftermath-style: the cast is gone; you reconstruct the crime
   from dossiers, evidence, and abandoned rooms, ending in a who/how/where
   accusation that the engine refuses until the keystone evidence is found.
-  First two cases open: **The Longwinter House** (a financier dead behind a
-  locked study door in a snowbound manor) and **The Sable Express** (a
-  colonel dead behind a latched sleeper door on a night train whose cars
-  reorder mid-case). Two more cases — The Meridian and The Gilded Curtain —
-  are sealed, coming next.
+  All four cases open: **The Longwinter House** (a financier dead behind a
+  locked study door in a snowbound manor), **The Sable Express** (a colonel
+  dead behind a latched sleeper door on a night train whose cars reorder
+  mid-case), **The Meridian** (a jewel courier vanishes between decks
+  mid-crossing), and **The Gilded Curtain** (the lead falls through the
+  trapdoor on opening night; the revolve itself rewires the map).
 - Accusation puzzle type, dossier journal category with per-world case-file
   labels, first-try-deduction achievement, eight interior scene primitives,
   and six new palettes.
