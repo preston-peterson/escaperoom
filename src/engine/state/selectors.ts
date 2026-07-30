@@ -1,6 +1,7 @@
 import type {
   GameState,
   HotspotDef,
+  HotspotShape,
   PassageId,
   RoomId,
   SceneLayer,
@@ -32,6 +33,37 @@ export function visibleHotspots(
     (h) =>
       condHolds(h.if, state) && !(h.hideWhen && evalCondition(h.hideWhen, state)),
   );
+}
+
+export function shapeArea(shape: HotspotShape): number {
+  switch (shape.kind) {
+    case 'rect':
+      return shape.w * shape.h;
+    case 'circle':
+      return Math.PI * shape.r * shape.r;
+    case 'polygon': {
+      // shoelace
+      let sum = 0;
+      const pts = shape.points;
+      for (let i = 0; i < pts.length; i++) {
+        const [x1, y1] = pts[i];
+        const [x2, y2] = pts[(i + 1) % pts.length];
+        sum += x1 * y2 - x2 * y1;
+      }
+      return Math.abs(sum) / 2;
+    }
+  }
+}
+
+/**
+ * Pointer stacking order: largest hotspots first (bottom), smallest last
+ * (top), so a specific target — a knocker, a lock, a dropped pipe — always
+ * wins pointer events over the broad navigate/inspect zone behind it.
+ * Authoring order in scene data carries no pointer meaning. Used by both the
+ * scene renderer and the occlusion audit; they must never diverge.
+ */
+export function pointerOrder(hotspots: HotspotDef[]): HotspotDef[] {
+  return [...hotspots].sort((a, b) => shapeArea(b.shape) - shapeArea(a.shape));
 }
 
 export interface MapRoomView {

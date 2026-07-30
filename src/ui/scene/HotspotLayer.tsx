@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { GameState, HotspotDef, SceneDef, WorldDef } from '../../engine/types.ts';
 import { condHolds, evalCondition } from '../../engine/state/conditions.ts';
+import { pointerOrder } from '../../engine/state/selectors.ts';
 
 function shapeElement(hs: HotspotDef, common: Record<string, unknown>) {
   switch (hs.shape.kind) {
@@ -53,8 +54,11 @@ export function HotspotLayer({
   onHotspot: (hotspotId: string) => void;
 }) {
   const [hovered, setHovered] = useState<string | null>(null);
-  const visible = scene.hotspots.filter(
-    (h) => condHolds(h.if, state) && !(h.hideWhen && evalCondition(h.hideWhen, state)),
+  // Largest first: small, specific targets render on top and win the pointer.
+  const visible = pointerOrder(
+    scene.hotspots.filter(
+      (h) => condHolds(h.if, state) && !(h.hideWhen && evalCondition(h.hideWhen, state)),
+    ),
   );
   const hoveredDef = visible.find((h) => h.id === hovered);
   return (
