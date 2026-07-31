@@ -971,6 +971,122 @@
   color: var(--ink-dim);
 }
 
+/* ===== Look around (touch discovery + desktop a11y) ===== */
+
+.hotspot--revealed {
+  fill: rgba(245, 201, 123, 0.1);
+  stroke: rgba(245, 201, 123, 0.65);
+  stroke-width: 2.5;
+  stroke-dasharray: 10 7;
+}
+
+.look-panel {
+  position: absolute;
+  top: 3rem;
+  right: 0.75rem;
+  max-height: calc(100% - 4.5rem);
+  overflow-y: auto;
+  width: min(46vw, 20rem);
+  background: rgba(13, 10, 8, 0.9);
+  border: 1px solid var(--panel-edge);
+  border-radius: 8px;
+  padding: 0.5rem;
+  animation: fadeIn 0.25s ease;
+}
+
+.look-panel ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.look-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  border-radius: 6px;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  line-height: 1.3;
+  color: var(--ink);
+  border: 1px solid transparent;
+}
+
+.look-item:hover,
+.look-item:focus-visible {
+  border-color: var(--amber);
+  color: var(--amber-bright);
+}
+
+.look-empty {
+  color: var(--ink-faint);
+  font-style: italic;
+  padding: 0.5rem;
+}
+
+/* ===== Touch exits (map nodes are too small to tap) ===== */
+
+.exits-bar {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-raised);
+  border-top: 1px solid var(--panel-edge);
+}
+
+.exit-button {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 0.5rem 1.1rem;
+  border: 1px solid var(--panel-edge);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--ink);
+  font-family: var(--font-display);
+}
+
+/* ===== Touch sizing ===== */
+
+@media (pointer: coarse) {
+  .game-header-right .btn,
+  .inv-item,
+  .combo-arrow,
+  .seq-el,
+  .accusation-option,
+  .socket,
+  .journal-entry,
+  .hint-reveal {
+    min-height: 44px;
+  }
+
+  .game-header-right .btn {
+    padding: 0.5rem 0.9rem;
+  }
+
+  .combo-arrow {
+    min-width: 44px;
+    font-size: 1.1rem;
+  }
+
+  .overlay-panel {
+    padding: 1.2rem 1rem;
+  }
+
+  /* Scene fills more of a short landscape screen */
+  .scene-room-name {
+    font-size: 1rem;
+    top: 0.5rem;
+  }
+
+  .toasts {
+    bottom: 3.6rem;
+    width: min(70vw, 420px);
+  }
+}
+
 /* ===== Narrow windows ===== */
 
 @media (max-width: 720px) {

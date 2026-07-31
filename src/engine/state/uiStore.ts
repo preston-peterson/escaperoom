@@ -29,6 +29,8 @@ export interface UiStore {
   selectedItem: ItemId | null;
   toasts: Toast[];
   shiftCue: ShiftCue | null;
+  /** "Look around": outlines every live hotspot and lists them by name. */
+  looking: boolean;
   setScreen: (screen: UiStore['screen']) => void;
   setViewMode: (mode: UiStore['viewMode']) => void;
   openOverlay: (overlay: Overlay) => void;
@@ -38,6 +40,7 @@ export interface UiStore {
   dismissToast: (id: number) => void;
   setShiftCue: (shift: ShiftId) => void;
   clearShiftCue: () => void;
+  toggleLooking: () => void;
 }
 
 let toastCounter = 0;
@@ -50,6 +53,7 @@ export const useUiStore = create<UiStore>((set) => ({
   selectedItem: null,
   toasts: [],
   shiftCue: null,
+  looking: false,
   setScreen: (screen) => set({ screen }),
   setViewMode: (viewMode) => set({ viewMode }),
   openOverlay: (overlay) => set({ overlay }),
@@ -65,4 +69,5 @@ export const useUiStore = create<UiStore>((set) => ({
   setShiftCue: (shift) =>
     set({ shiftCue: { shift, cueSeq: ++shiftCueCounter } }),
   clearShiftCue: () => set({ shiftCue: null }),
+  toggleLooking: () => set((s) => ({ looking: !s.looking })),
 }));

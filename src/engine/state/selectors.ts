@@ -35,6 +35,41 @@ export function visibleHotspots(
   );
 }
 
+/**
+ * Smallest comfortable touch target, expressed in scene units.
+ *
+ * A landscape phone renders the 1600-unit-wide scene at roughly 0.53 CSS px
+ * per unit, so the 44px minimum both Apple and Google recommend works out at
+ * about 83 units. Deriving it from a fixed reference rather than measuring at
+ * runtime keeps the value pure, so the occlusion audit can check exactly what
+ * the renderer will draw.
+ */
+export const TOUCH_TARGET_UNITS = 83;
+
+/** Grow a shape's hit area to the touch minimum, leaving its art untouched. */
+export function touchPadded(shape: HotspotShape): HotspotShape {
+  switch (shape.kind) {
+    case 'rect': {
+      const w = Math.max(shape.w, TOUCH_TARGET_UNITS);
+      const h = Math.max(shape.h, TOUCH_TARGET_UNITS);
+      return {
+        kind: 'rect',
+        x: shape.x - (w - shape.w) / 2,
+        y: shape.y - (h - shape.h) / 2,
+        w,
+        h,
+      };
+    }
+    case 'circle':
+      return { ...shape, r: Math.max(shape.r, TOUCH_TARGET_UNITS / 2) };
+    case 'polygon': {
+      // Polygons are the odd shapes (chasms, serpent mouths) and are already
+      // large; padding one would distort it, so leave it be.
+      return shape;
+    }
+  }
+}
+
 export function shapeArea(shape: HotspotShape): number {
   switch (shape.kind) {
     case 'rect':

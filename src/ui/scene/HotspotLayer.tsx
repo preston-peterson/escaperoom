@@ -1,43 +1,33 @@
 import { useState } from 'react';
-import type { GameState, HotspotDef, SceneDef, WorldDef } from '../../engine/types.ts';
+import type { GameState, HotspotDef, HotspotShape, SceneDef, WorldDef } from '../../engine/types.ts';
 import { condHolds, evalCondition } from '../../engine/state/conditions.ts';
-import { pointerOrder } from '../../engine/state/selectors.ts';
+import { pointerOrder, touchPadded } from '../../engine/state/selectors.ts';
 
-function shapeElement(hs: HotspotDef, common: Record<string, unknown>) {
-  switch (hs.shape.kind) {
+function shapeElement(shape: HotspotShape, common: Record<string, unknown>) {
+  switch (shape.kind) {
     case 'rect':
       return (
-        <rect
-          x={hs.shape.x}
-          y={hs.shape.y}
-          width={hs.shape.w}
-          height={hs.shape.h}
-          rx={8}
-          {...common}
-        />
+        <rect x={shape.x} y={shape.y} width={shape.w} height={shape.h} rx={8} {...common} />
       );
     case 'circle':
-      return <circle cx={hs.shape.cx} cy={hs.shape.cy} r={hs.shape.r} {...common} />;
+      return <circle cx={shape.cx} cy={shape.cy} r={shape.r} {...common} />;
     case 'polygon':
       return (
-        <polygon points={hs.shape.points.map((p) => p.join(',')).join(' ')} {...common} />
+        <polygon points={shape.points.map((p) => p.join(',')).join(' ')} {...common} />
       );
   }
 }
 
-function labelAnchor(hs: HotspotDef): [number, number] {
-  switch (hs.shape.kind) {
+function labelAnchor(shape: HotspotShape): [number, number] {
+  switch (shape.kind) {
     case 'rect':
-      return [hs.shape.x + hs.shape.w / 2, hs.shape.y - 14];
+      return [shape.x + shape.w / 2, shape.y - 14];
     case 'circle':
-      return [hs.shape.cx, hs.shape.cy - hs.shape.r - 14];
+      return [shape.cx, shape.cy - shape.r - 14];
     case 'polygon': {
-      const xs = hs.shape.points.map((p) => p[0]);
-      const ys = hs.shape.points.map((p) => p[1]);
-      return [
-        (Math.min(...xs) + Math.max(...xs)) / 2,
-        Math.min(...ys) - 14,
-      ];
+      const xs = shape.points.map((p) => p[0]);
+      const ys = shape.points.map((p) => p[1]);
+      return [(Math.min(...xs) + Math.max(...xs)) / 2, Math.min(...ys) - 14];
     }
   }
 }
@@ -47,23 +37,32 @@ export function HotspotLayer({
   scene,
   state,
   onHotspot,
+  touch,
+  looking,
 }: {
   scene: SceneDef;
   state: GameState;
   world: WorldDef;
   onHotspot: (hotspotId: string) => void;
+  touch: boolean;
+  looking: boolean;
 }) {
   const [hovered, setHovered] = useState<string | null>(null);
-  // Largest first: small, specific targets render on top and win the pointer.
-  const visible = pointerOrder(
-    scene.hotspots.filter(
-      (h) => condHolds(h.if, state) && !(h.hideWhen && evalCondition(h.hideWhen, state)),
-    ),
+  const live = scene.hotspots.filter(
+    (h) => condHolds(h.if, state) && !(h.hideWhen && evalCondition(h.hideWhen, state)),
   );
-  const hoveredDef = visible.find((h) => h.id === hovered);
+  // On touch every target grows to a finger-sized minimum; the art doesn't move.
+  const shaped: { def: HotspotDef; shape: HotspotShape }[] = live.map((def) => ({
+    def,
+    shape: touch ? touchPadded(def.shape) : def.shape,
+  }));
+  // Largest first: small, specific targets render on top and win the pointer.
+  const ordered = pointerOrder(shaped.map((s) => ({ ...s.def, shape: s.shape })));
+  const hoveredDef = ordered.find((h) => h.id === hovered);
+
   return (
     <g>
-      {visible.map((hs) => (
+      {ordered.map((hs) => (
         <g
           key={hs.id}
           role="button"
@@ -81,13 +80,15 @@ export function HotspotLayer({
           onFocus={() => setHovered(hs.id)}
           onBlur={() => setHovered((h) => (h === hs.id ? null : h))}
         >
-          {shapeElement(hs, { className: 'hotspot' })}
+          {shapeElement(hs.shape, {
+            className: `hotspot${looking ? ' hotspot--revealed' : ''}`,
+          })}
         </g>
       ))}
       {hoveredDef && (
         <g pointerEvents="none" style={{ animation: 'fadeIn 0.15s ease' }}>
           {(() => {
-            const [lx, ly] = labelAnchor(hoveredDef);
+            const [lx, ly] = labelAnchor(hoveredDef.shape);
             const tw = hoveredDef.label.length * 9.5 + 28;
             return (
               <>

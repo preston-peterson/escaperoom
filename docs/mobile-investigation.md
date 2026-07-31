@@ -6,7 +6,13 @@ than expected. In portrait, no — not without redrawing every scene.**
 Today phones get a "come back on a computer" notice. This is what it would
 take to lift it.
 
-> **Update, same day:** the first item below — fitting the scene instead of
+> **Update: Phase 1 is built.** Landscape touch play is live — padded hit
+> areas (audited so the padding can't bury anything), named exit buttons in
+> place of untappable map nodes, 44px controls, a rotate prompt instead of a
+> refusal, and the "look around" control that answers the discovery problem.
+> Portrait remains gated. What follows is the investigation that led there.
+>
+> **Also, same day:** the first item below — fitting the scene instead of
 > cropping it — turned out to be a live *desktop* bug too, and has been
 > fixed. On a 21:9 monitor (2560×1080) four hotspots were cropped entirely
 > off the canvas, two of them required by the walkthrough; on 32:9 it was 22,

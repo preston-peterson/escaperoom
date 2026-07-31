@@ -33,6 +33,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   labels, first-try-deduction achievement, eight interior scene primitives,
   and six new palettes.
 
+### Added
+- **Landscape phones and tablets can play.** Touch targets grow to a
+  finger-sized minimum without moving the art, map navigation gains named
+  exit buttons (room nodes are too small to tap and can't be enlarged without
+  colliding), and controls meet the 44px minimum. Portrait asks you to turn
+  the phone rather than turning you away.
+- **"Look around"** names and outlines everything you can reach in the
+  current room. Built for touch, which has no hover — and on desktop it's the
+  same information a screen reader needs, available on demand.
+
 ### Fixed
 - Scenes now fit the window instead of being cropped to fill it. On
   ultrawide monitors the old behaviour cut real interactions off the canvas —

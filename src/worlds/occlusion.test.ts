@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { GameAction, GameState, HotspotShape, WorldDef } from '../engine/types.ts';
 import { reduce } from '../engine/state/reducer.ts';
-import { pointerOrder, visibleHotspots } from '../engine/state/selectors.ts';
+import { pointerOrder, touchPadded, visibleHotspots } from '../engine/state/selectors.ts';
 import { labyrinthWorld } from './labyrinth/world.ts';
 import { buildWalkthrough as labyrinthWalkthrough } from './labyrinth/walkthrough.ts';
 import { islandWorld } from './island/world.ts';
@@ -92,14 +92,19 @@ function coveredFraction(inner: HotspotShape, covers: HotspotShape[]): number {
   return total === 0 ? 0 : covered / total;
 }
 
-function auditWorld(world: WorldDef, actions: GameAction[]): string[] {
+function auditWorld(world: WorldDef, actions: GameAction[], touch = false): string[] {
   const flagged = new Set<string>();
   let state = {} as GameState;
   for (const action of actions) {
     state = reduce(state, action, world).state;
     const room = state.currentRoom;
-    // Mirror the renderer's stacking exactly (largest first).
-    const visible = pointerOrder(visibleHotspots(state, world, room));
+    // Mirror the renderer's stacking exactly (largest first), including the
+    // finger-sized padding touch devices get.
+    const visible = pointerOrder(
+      visibleHotspots(state, world, room).map((h) =>
+        touch ? { ...h, shape: touchPadded(h.shape) } : h,
+      ),
+    );
     for (let i = 0; i < visible.length - 1; i++) {
       const later = visible.slice(i + 1).map((h) => h.shape);
       const frac = coveredFraction(visible[i].shape, later);
@@ -129,6 +134,12 @@ describe('hotspot occlusion audit (knocker-bug class)', () => {
   for (const [world, walkthrough] of worlds) {
     it(`${world.id}: no hotspot is buried under later ones at any walkthrough state`, () => {
       const findings = auditWorld(world, walkthrough());
+      if (findings.length > 0) console.log(findings.join('\n'));
+      expect(findings).toEqual([]);
+    });
+
+    it(`${world.id}: touch padding doesn't bury anything either`, () => {
+      const findings = auditWorld(world, walkthrough(), true);
       if (findings.length > 0) console.log(findings.join('\n'));
       expect(findings).toEqual([]);
     });

@@ -11,6 +11,8 @@ import { PuzzleOverlay } from '../puzzles/PuzzleOverlay.tsx';
 import { JournalPanel } from '../hud/JournalPanel.tsx';
 import { MenuOverlay } from '../hud/MenuOverlay.tsx';
 import { allowMove } from '../moveGuard.ts';
+import { isTouchDevice } from '../mobileGate.ts';
+import { currentExits } from '../../engine/state/selectors.ts';
 
 /** Hosts map/scene views, HUD, overlays, and all store→UI side-channel wiring. */
 export function GameScreen() {
@@ -21,6 +23,9 @@ export function GameScreen() {
   const viewMode = useUiStore((s) => s.viewMode);
   const setViewMode = useUiStore((s) => s.setViewMode);
   const overlay = useUiStore((s) => s.overlay);
+  const looking = useUiStore((s) => s.looking);
+  const toggleLooking = useUiStore((s) => s.toggleLooking);
+  const touch = isTouchDevice();
   const openOverlay = useUiStore((s) => s.openOverlay);
   const closeOverlay = useUiStore((s) => s.closeOverlay);
   const setScreen = useUiStore((s) => s.setScreen);
@@ -94,8 +99,18 @@ export function GameScreen() {
             onClick={() => setViewMode(viewMode === 'map' ? 'scene' : 'map')}
             aria-pressed={viewMode === 'map'}
           >
-            {viewMode === 'map' ? 'Look around' : 'Consult the map'}
+            {viewMode === 'map' ? 'Back to the room' : 'Consult the map'}
           </button>
+          {viewMode === 'scene' && (
+            <button
+              className="btn"
+              onClick={toggleLooking}
+              aria-pressed={looking}
+              title="Name everything you can reach from here"
+            >
+              {looking ? 'Stop looking' : 'Look around'}
+            </button>
+          )}
           <button className="btn" onClick={() => openOverlay({ kind: 'journal' })}>
             Journal
           </button>
@@ -116,9 +131,27 @@ export function GameScreen() {
             onEnterRoom={() => setViewMode('scene')}
           />
         ) : (
-          <SceneView state={state} world={world} />
+          <SceneView state={state} world={world} touch={touch} />
         )}
       </main>
+
+      {/* Map room nodes are far too small to tap on a phone, and they can't be
+          grown without colliding. Named exits sidestep the geometry entirely. */}
+      {touch && viewMode === 'map' && (
+        <div className="exits-bar" role="navigation" aria-label="Exits">
+          {currentExits(state).map(({ passage, to }) => (
+            <button
+              key={passage}
+              className="exit-button"
+              onClick={() => {
+                if (allowMove()) dispatch({ type: 'MOVE', passage, at: Date.now() });
+              }}
+            >
+              {state.visitedRooms[to] ? (world.rooms[to]?.name ?? to) : 'Unexplored'}
+            </button>
+          ))}
+        </div>
+      )}
 
       <InventoryBar />
       <Toasts />

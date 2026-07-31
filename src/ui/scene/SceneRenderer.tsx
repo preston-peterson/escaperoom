@@ -34,11 +34,15 @@ export function SceneRenderer({
   state,
   world,
   onHotspot,
+  touch,
+  looking,
 }: {
   scene: SceneDef;
   state: GameState;
   world: WorldDef;
   onHotspot: (hotspotId: string) => void;
+  touch: boolean;
+  looking: boolean;
 }) {
   const groupRefs = useRef<(SVGGElement | null)[]>([]);
   const parallaxFactors = useRef<number[]>([]);
@@ -131,7 +135,14 @@ export function SceneRenderer({
           <stop offset="100%" stopColor="#000" stopOpacity={0.55} />
         </radialGradient>
       </defs>
-      <HotspotLayer scene={scene} state={state} world={world} onHotspot={onHotspot} />
+      <HotspotLayer
+        scene={scene}
+        state={state}
+        world={world}
+        onHotspot={onHotspot}
+        touch={touch}
+        looking={looking}
+      />
     </svg>
   );
 }
