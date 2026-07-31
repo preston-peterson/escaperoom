@@ -106,6 +106,13 @@ export function WorldSelect() {
           </div>
         </section>
       ))}
+      <p className="world-offline-note">
+        Travelling?{' '}
+        <a href="./labyrinth-below-offline.html" download>
+          Take the whole atlas with you
+        </a>{' '}
+        — one file, no network needed.
+      </p>
     </div>
   );
 }

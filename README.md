@@ -12,6 +12,12 @@ SVG; all sound is synthesized WebAudio.
 
 **Play it now:** https://preston-peterson.github.io/escaperoom/
 
+**Play it on a plane:** [download the single-file
+copy](https://preston-peterson.github.io/escaperoom/labyrinth-below-offline.html)
+(right-click → Save As). The whole anthology — all eight worlds, art, and
+sound — is inlined into one HTML file. Double-click it on any laptop and it
+runs with no server and no network.
+
 ## Play
 
 ```sh

@@ -11,6 +11,7 @@ secrets.*
 # build/deps
 node_modules/
 dist/
+dist-offline/
 *.tsbuildinfo
 
 # graphify generated output

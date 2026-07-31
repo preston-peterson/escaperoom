@@ -28,6 +28,10 @@ jobs:
       # never ships.
       - run: npm test
       - run: npm run build
+      # Ship a self-contained copy alongside the site: one file, no server,
+      # playable from a laptop with no network (a plane, say).
+      - run: npm run build:offline
+      - run: cp dist-offline/index.html dist/labyrinth-below-offline.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -259,6 +259,25 @@
   box-shadow: 0 0 14px rgba(181, 68, 44, 0.45);
 }
 
+.world-offline-note {
+  max-width: 1200px;
+  margin: 0.5rem auto 2rem;
+  text-align: left;
+  color: var(--ink-faint);
+  font-size: 0.86rem;
+  font-style: italic;
+}
+
+.world-offline-note a {
+  color: var(--ink-dim);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.world-offline-note a:hover {
+  color: var(--amber);
+}
+
 /* ===== Game screen ===== */
 
 .game-screen {
