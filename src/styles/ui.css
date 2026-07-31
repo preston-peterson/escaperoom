@@ -88,6 +88,13 @@
   margin-bottom: 2rem;
 }
 
+.rotate-mark {
+  width: clamp(72px, 18vw, 104px);
+  height: auto;
+  margin-bottom: 0.6rem;
+  animation: rotateHint 3.2s ease-in-out infinite;
+}
+
 .unsupported-continue {
   padding: 0.7rem 2rem;
   color: var(--ink-dim);

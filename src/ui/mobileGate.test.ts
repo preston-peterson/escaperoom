@@ -1,13 +1,26 @@
 import { describe, expect, it } from 'vitest';
-import { gateReason, MIN_PLAYABLE_WIDTH, MIN_TOUCH_WIDTH } from './mobileGate.ts';
+import {
+  gateReason,
+  isDismissable,
+  MIN_PLAYABLE_WIDTH,
+  MIN_TOUCH_WIDTH,
+} from './mobileGate.ts';
 
 const touch = (width: number, height: number) => ({ coarsePointer: true, width, height });
 const mouse = (width: number, height: number) => ({ coarsePointer: false, width, height });
 
 describe('gateReason', () => {
-  it('asks a phone held upright to turn', () => {
+  it('asks any upright touch device to turn — portrait is out of scope', () => {
     expect(gateReason(touch(390, 844))).toBe('rotate');
-    expect(gateReason(touch(768, 1024))).toBe('rotate'); // tablet portrait too
+    expect(gateReason(touch(768, 1024))).toBe('rotate'); // tablets included
+    expect(gateReason(touch(1024, 1366))).toBe('rotate'); // even a big one
+  });
+
+  it('offers no way past the rotate prompt, since turning always works', () => {
+    expect(isDismissable('rotate')).toBe(false);
+    // the others may be the best the user's hardware can do
+    expect(isDismissable('small')).toBe(true);
+    expect(isDismissable('narrow')).toBe(true);
   });
 
   it('lets a landscape phone or tablet play', () => {

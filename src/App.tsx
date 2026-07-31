@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useUiStore } from './engine/state/uiStore.ts';
-import { COARSE_POINTER_QUERY, gateReason, readEnv, type GateReason } from './ui/mobileGate.ts';
+import {
+  COARSE_POINTER_QUERY,
+  gateReason,
+  isDismissable,
+  readEnv,
+  type GateReason,
+} from './ui/mobileGate.ts';
 import { TitleScreen } from './ui/screens/TitleScreen.tsx';
 import { WorldSelect } from './ui/screens/WorldSelect.tsx';
 import { GameScreen } from './ui/screens/GameScreen.tsx';
@@ -39,7 +45,9 @@ export default function App() {
     return () => mql?.removeEventListener?.('change', apply);
   }, []);
 
-  if (reason && !override) {
+  // A dismissal shouldn't outlive the condition: turn the phone back to
+  // portrait and the rotate prompt is due again.
+  if (reason && !(override && isDismissable(reason))) {
     return <UnsupportedScreen reason={reason} onContinue={() => setOverride(true)} />;
   }
 

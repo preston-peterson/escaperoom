@@ -1,11 +1,13 @@
 /**
  * Playability gate.
  *
- * The game is built for a wide window. Touch is now supported in landscape —
- * see the look-around control and padded hit areas — but portrait crops the
- * scenes past the point of playability, so we ask for a turn of the phone
- * rather than shipping something broken. Decisions come from what the device
- * can do, never from sniffing user-agent strings.
+ * Touch is supported in landscape — see the look-around control and the
+ * padded hit areas. Portrait is not, and won't be: the scenes are painted
+ * 16:9, and a portrait phone renders them at about a fifth of scale, which
+ * puts every touch target near 18px against a 44px minimum. It would look
+ * right and refuse to respond. So portrait always asks for a turn of the
+ * phone. Decisions come from what the device can do, never from sniffing
+ * user-agent strings.
  */
 
 export type GateReason = 'rotate' | 'small' | 'narrow' | null;
@@ -24,10 +26,16 @@ export interface GateEnv {
 
 export function gateReason(env: GateEnv): GateReason {
   if (env.coarsePointer) {
+    // Portrait is out of scope by design, at any size: turn the device.
     if (env.height > env.width) return 'rotate';
     return env.width < MIN_TOUCH_WIDTH ? 'small' : null;
   }
   return env.width < MIN_PLAYABLE_WIDTH ? 'narrow' : null;
+}
+
+/** Rotating is always available, so the rotate prompt offers no way past it. */
+export function isDismissable(reason: Exclude<GateReason, null>): boolean {
+  return reason !== 'rotate';
 }
 
 export const COARSE_POINTER_QUERY = '(pointer: coarse) and (hover: none)';

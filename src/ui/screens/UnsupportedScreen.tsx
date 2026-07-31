@@ -1,9 +1,11 @@
 import type { GateReason } from '../mobileGate.ts';
+import { isDismissable } from '../mobileGate.ts';
 
 /**
- * Shown when the device can't really play: a phone/tablet, or a window too
- * narrow for the board. Written in the game's voice, and never a dead end —
- * anyone who insists can walk through it.
+ * Shown when the device can't play as it is held: a phone in portrait, a
+ * screen too small, or a desktop window too narrow. Written in the game's
+ * voice. Only the rotate prompt is a dead end, and only because turning the
+ * phone is always possible.
  */
 export function UnsupportedScreen({
   reason,
@@ -15,9 +17,9 @@ export function UnsupportedScreen({
   const copy = {
     rotate: {
       kicker: 'The world is wider than this',
-      title: 'Turn your phone sideways',
-      body: 'These rooms are painted wide — held upright, most of what matters falls outside the frame. Turn the phone to landscape and the whole scene comes into view.',
-      note: 'Landscape works properly: every target is sized for a fingertip, and the "look around" button names what you can reach.',
+      title: 'Rotate to play',
+      body: 'These rooms are painted wide — a phone held upright shrinks them to about a fifth of their size, small enough that nothing would answer your finger. Turn the phone sideways and the whole scene opens up.',
+      note: 'The game picks up the moment you turn it. Everything is sized for a fingertip in landscape, and the "look around" button will name whatever you can reach.',
     },
     small: {
       kicker: 'A door you cannot open here',
@@ -48,13 +50,48 @@ export function UnsupportedScreen({
       </svg>
 
       <div className="unsupported-content">
+        {reason === 'rotate' && (
+          <svg className="rotate-mark" viewBox="0 0 120 120" aria-hidden>
+            <rect
+              x="42"
+              y="18"
+              width="36"
+              height="60"
+              rx="6"
+              fill="none"
+              stroke="var(--amber)"
+              strokeWidth="3"
+              opacity="0.45"
+            />
+            <rect
+              x="30"
+              y="52"
+              width="60"
+              height="36"
+              rx="6"
+              fill="none"
+              stroke="var(--amber)"
+              strokeWidth="3"
+            />
+            <path
+              d="M 92 40 a 34 34 0 0 0 -26 -18"
+              fill="none"
+              stroke="var(--amber)"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+            <path d="M 96 26 L 95 43 L 80 38 Z" fill="var(--amber)" />
+          </svg>
+        )}
         <p className="title-kicker">{copy.kicker}</p>
         <h1 className="unsupported-title">{copy.title}</h1>
         <p className="unsupported-body">{copy.body}</p>
         <p className="unsupported-note">{copy.note}</p>
-        <button className="btn unsupported-continue" onClick={onContinue}>
-          Try anyway
-        </button>
+        {isDismissable(reason) && (
+          <button className="btn unsupported-continue" onClick={onContinue}>
+            Try anyway
+          </button>
+        )}
       </div>
     </div>
   );

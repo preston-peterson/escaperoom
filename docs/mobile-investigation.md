@@ -110,9 +110,13 @@ mood, and 2 improves desktop accessibility at the same time.
 precision drags, journal typography for small screens, safe-area insets for
 notches.
 
-**Phase 3 — reconsider portrait.** Only worth it if phones become a real
-audience; it means authoring a portrait composition per room, or a redesign
-where scenes pan.
+**Phase 3 — portrait: decided against, permanently.** The scenes are painted
+16:9; a portrait phone renders them at about a fifth of scale, which puts
+every touch target near 18px against a 44px minimum. It would look correct
+and refuse to respond — a worse failure than an honest prompt. Portrait shows
+"Rotate to play" at any size, with no way past it, because turning the device
+is always possible. Supporting it would mean authoring a second composition
+for every room in eight worlds, and it is not planned.
 
 Rough effort: Phase 1 is the substantial one — call it a day's focused work
 plus a real device test pass. Phases 2 and 3 are optional and can wait for
