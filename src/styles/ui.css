@@ -290,10 +290,36 @@
 
 /* ===== Game screen ===== */
 
+/* Areas, not source order: the same DOM becomes top/bottom bars on a desktop
+   and a collapsible side rail on a phone. */
 .game-screen {
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    'header'
+    'main'
+    'inv';
+}
+
+.game-rail {
+  display: contents; /* desktop: children fall into their own grid areas */
+}
+
+.rail-toggle {
+  display: none; /* only meaningful when the rail exists */
+}
+
+.game-header {
+  grid-area: header;
+}
+
+.game-main {
+  grid-area: main;
+}
+
+.inventory-bar {
+  grid-area: inv;
 }
 
 .game-header {
@@ -328,8 +354,8 @@
 }
 
 .game-main {
-  flex: 1;
   min-height: 0;
+  min-width: 0;
   position: relative;
 }
 
@@ -1048,43 +1074,149 @@
   font-family: var(--font-display);
 }
 
-/* ===== Touch sizing ===== */
+/* ===== Touch: chrome down the side, not across the top and bottom =====
 
-@media (pointer: coarse) {
-  .game-header-right .btn,
-  .inv-item,
-  .combo-arrow,
-  .seq-el,
-  .accusation-option,
-  .socket,
-  .journal-entry,
-  .hint-reveal {
-    min-height: 44px;
-  }
+   A landscape phone is ~390px tall. Top and bottom bars cost ~150px of that,
+   and because scenes are 16:9, height lost is width lost too — the picture
+   ends up roughly 427x240 inside an 844x390 screen. Moving the same controls
+   into a collapsible rail returns the height, and the scene renders about
+   693x390 instead.
 
-  .game-header-right .btn {
-    padding: 0.5rem 0.9rem;
-  }
+   Driven by a `touch` class on <html> rather than a media query, so the app
+   and the stylesheet agree on one definition of "this is a touch device" —
+   and so the layout can be exercised in a desktop browser. */
 
-  .combo-arrow {
-    min-width: 44px;
-    font-size: 1.1rem;
-  }
+:root.touch .game-screen {
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: 'rail main';
+}
 
-  .overlay-panel {
-    padding: 1.2rem 1rem;
-  }
+:root.touch .game-rail {
+  grid-area: rail;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 10.5rem;
+  padding: 0.4rem;
+  background: var(--bg-raised);
+  border-right: 1px solid var(--panel-edge);
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: width 0.22s ease, padding 0.22s ease;
+}
 
-  /* Scene fills more of a short landscape screen */
-  .scene-room-name {
-    font-size: 1rem;
-    top: 0.5rem;
-  }
+:root.touch .game-rail--closed {
+  width: 2.1rem;
+  padding: 0.4rem 0.15rem;
+}
 
-  .toasts {
-    bottom: 3.6rem;
-    width: min(70vw, 420px);
-  }
+:root.touch .game-rail--closed .game-header,
+:root.touch .game-rail--closed .exits-bar,
+:root.touch .game-rail--closed .inventory-bar {
+  display: none;
+}
+
+:root.touch .rail-toggle {
+  display: block;
+  align-self: flex-end;
+  min-width: 1.8rem;
+  min-height: 2.4rem;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--amber);
+  border: 1px solid var(--panel-edge);
+  border-radius: 6px;
+  background: var(--panel);
+}
+
+/* the bars become stacked columns inside the rail */
+:root.touch .game-header,
+:root.touch .game-header-right,
+:root.touch .exits-bar,
+:root.touch .inventory-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.35rem;
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: none;
+  overflow: visible;
+  min-height: 0;
+}
+
+:root.touch .game-world-title {
+  display: block;
+  font-size: 0.82rem;
+  text-align: center;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid var(--panel-edge);
+}
+
+:root.touch .game-header-right .btn,
+:root.touch .exit-button,
+:root.touch .inv-item {
+  width: 100%;
+  text-align: center;
+  font-size: 0.86rem;
+  padding: 0.5rem 0.4rem;
+}
+
+:root.touch .timer {
+  text-align: center;
+}
+
+:root.touch .inventory-empty,
+:root.touch .inventory-hint {
+  font-size: 0.75rem;
+  text-align: center;
+  margin: 0;
+}
+
+:root.touch .toasts {
+  bottom: 0.6rem;
+  left: 0.6rem;
+  transform: none;
+  width: min(56vw, 22rem);
+}
+
+:root.touch .look-panel {
+  top: 0.5rem;
+  right: 0.5rem;
+  width: min(40vw, 15rem);
+  font-size: 0.9rem;
+}
+
+/* ===== Touch sizing: nothing smaller than a fingertip ===== */
+
+:root.touch .game-header-right .btn,
+:root.touch .inv-item,
+:root.touch .combo-arrow,
+:root.touch .seq-el,
+:root.touch .accusation-option,
+:root.touch .socket,
+:root.touch .journal-entry,
+:root.touch .hint-reveal,
+:root.touch .exit-button,
+:root.touch .look-item {
+  min-height: 44px;
+}
+
+:root.touch .combo-arrow {
+  min-width: 44px;
+  font-size: 1.1rem;
+}
+
+:root.touch .overlay-panel {
+  padding: 1.2rem 1rem;
+  max-height: 92vh;
+}
+
+:root.touch .scene-room-name {
+  font-size: 1rem;
+  top: 0.5rem;
 }
 
 /* ===== Narrow windows ===== */

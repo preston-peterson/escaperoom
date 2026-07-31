@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useGameStore } from '../../engine/state/store.ts';
 import { useUiStore } from '../../engine/state/uiStore.ts';
 import { saveGame, recordCompletion, clearSave } from '../../engine/save/persistence.ts';
@@ -26,6 +26,7 @@ export function GameScreen() {
   const looking = useUiStore((s) => s.looking);
   const toggleLooking = useUiStore((s) => s.toggleLooking);
   const touch = isTouchDevice();
+  const [railOpen, setRailOpen] = useState(true);
   const openOverlay = useUiStore((s) => s.openOverlay);
   const closeOverlay = useUiStore((s) => s.closeOverlay);
   const setScreen = useUiStore((s) => s.setScreen);
@@ -90,9 +91,23 @@ export function GameScreen() {
 
   return (
     <div className="game-screen">
-      <header className="game-header">
-        <span className="game-world-title">{world.title}</span>
-        <div className="game-header-right">
+      {/* On a landscape phone the scene is height-starved, and a 16:9 picture
+          loses width too when it loses height. Stacking the chrome down one
+          side — collapsible — buys back the room. On desktop this wrapper is
+          display:contents, so the classic top/bottom bars are unchanged. */}
+      <aside className={`game-rail${railOpen ? '' : ' game-rail--closed'}`}>
+        <button
+          className="rail-toggle"
+          onClick={() => setRailOpen((o) => !o)}
+          aria-expanded={railOpen}
+          aria-label={railOpen ? 'Hide the controls' : 'Show the controls'}
+          title={railOpen ? 'Hide the controls' : 'Show the controls'}
+        >
+          {railOpen ? '‹' : '›'}
+        </button>
+        <header className="game-header">
+          <span className="game-world-title">{world.title}</span>
+          <div className="game-header-right">
           <TimerDisplay />
           <button
             className="btn"
@@ -114,11 +129,32 @@ export function GameScreen() {
           <button className="btn" onClick={() => openOverlay({ kind: 'journal' })}>
             Journal
           </button>
-          <button className="btn" onClick={() => openOverlay({ kind: 'menu' })} aria-label="Menu">
-            ≡
-          </button>
-        </div>
-      </header>
+            <button className="btn" onClick={() => openOverlay({ kind: 'menu' })} aria-label="Menu">
+              ≡
+            </button>
+          </div>
+        </header>
+
+        {/* Map room nodes are far too small to tap on a phone, and they can't
+            be grown without colliding. Named exits sidestep the geometry. */}
+        {touch && viewMode === 'map' && (
+          <nav className="exits-bar" aria-label="Exits">
+            {currentExits(state).map(({ passage, to }) => (
+              <button
+                key={passage}
+                className="exit-button"
+                onClick={() => {
+                  if (allowMove()) dispatch({ type: 'MOVE', passage, at: Date.now() });
+                }}
+              >
+                {state.visitedRooms[to] ? (world.rooms[to]?.name ?? to) : 'Unexplored'}
+              </button>
+            ))}
+          </nav>
+        )}
+
+        <InventoryBar />
+      </aside>
 
       <main className="game-main">
         {viewMode === 'map' ? (
@@ -135,25 +171,6 @@ export function GameScreen() {
         )}
       </main>
 
-      {/* Map room nodes are far too small to tap on a phone, and they can't be
-          grown without colliding. Named exits sidestep the geometry entirely. */}
-      {touch && viewMode === 'map' && (
-        <div className="exits-bar" role="navigation" aria-label="Exits">
-          {currentExits(state).map(({ passage, to }) => (
-            <button
-              key={passage}
-              className="exit-button"
-              onClick={() => {
-                if (allowMove()) dispatch({ type: 'MOVE', passage, at: Date.now() });
-              }}
-            >
-              {state.visitedRooms[to] ? (world.rooms[to]?.name ?? to) : 'Unexplored'}
-            </button>
-          ))}
-        </div>
-      )}
-
-      <InventoryBar />
       <Toasts />
 
       {overlay?.kind === 'puzzle' && <PuzzleOverlay puzzle={overlay.puzzle} />}

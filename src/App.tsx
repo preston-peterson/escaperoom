@@ -29,6 +29,16 @@ export default function App() {
   const reason = useGateReason();
   const [override, setOverride] = useState(false);
 
+  // One definition of "touch device", shared by the layout and the stylesheet.
+  useEffect(() => {
+    const apply = () =>
+      document.documentElement.classList.toggle('touch', readEnv().coarsePointer);
+    apply();
+    const mql = window.matchMedia?.(COARSE_POINTER_QUERY);
+    mql?.addEventListener?.('change', apply);
+    return () => mql?.removeEventListener?.('change', apply);
+  }, []);
+
   if (reason && !override) {
     return <UnsupportedScreen reason={reason} onContinue={() => setOverride(true)} />;
   }
