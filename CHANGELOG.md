@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Two ways to play without a network.** The site is now an installable PWA
+  — visit once and it caches every world, opens in its own window, and
+  updates itself. And `npm run build:offline` produces a single
+  self-contained HTML file (published alongside the site) that runs from a
+  double-click with no server at all.
+- App icons generated from the repo's own SVG mark (`npm run icons`), so the
+  only binary assets are derived from our vector art.
+- A notice for phones and cramped windows explaining the game needs a
+  pointer and width, with a "Try anyway" escape hatch.
+
+### Added
 - **Act II: The Casebook** — the atlas gains a second shelf of whodunit
   mysteries. Aftermath-style: the cast is gone; you reconstruct the crime
   from dossiers, evidence, and abandoned rooms, ending in a who/how/where
