@@ -5,6 +5,7 @@ import { useGameStore } from '../../engine/state/store.ts';
 import { useUiStore } from '../../engine/state/uiStore.ts';
 import { loadGame, loadSettings } from '../../engine/save/persistence.ts';
 import { formatMs } from '../../engine/timer.ts';
+import { useInstallPrompt } from '../useInstallPrompt.ts';
 
 /** One playable world, three sealed doors. */
 export function WorldSelect() {
@@ -12,6 +13,7 @@ export function WorldSelect() {
   const setViewMode = useUiStore((s) => s.setViewMode);
   const setWorld = useGameStore((s) => s.setWorld);
   const dispatch = useGameStore((s) => s.dispatch);
+  const install = useInstallPrompt();
   const [expanded, setExpanded] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [saves, setSaves] = useState<Record<string, number>>({});
@@ -112,6 +114,16 @@ export function WorldSelect() {
           Take the whole atlas with you
         </a>{' '}
         — one file, no network needed.
+        {install && (
+          <>
+            {' '}
+            Or{' '}
+            <button className="world-install-link" onClick={install}>
+              install it
+            </button>{' '}
+            to open it like an app.
+          </>
+        )}
       </p>
     </div>
   );

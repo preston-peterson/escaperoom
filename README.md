@@ -12,10 +12,14 @@ SVG; all sound is synthesized WebAudio.
 
 **Play it now:** https://preston-peterson.github.io/escaperoom/
 
-**Install it:** the site is a PWA. Visit once and your browser will offer to
-install it (Chrome/Edge: the icon in the address bar; Safari: *Add to Dock*).
-It then opens in its own window and plays offline — every world is cached up
-front, including ones you've never opened. Updates install themselves.
+**Install it:** the site is a PWA. Visit once and every world is cached up
+front — including ones you've never opened — so it plays offline in any
+browser with service workers, Firefox included. Chromium browsers (Chrome,
+Edge, Brave, Ungoogled Chromium) also offer to *install* it, and the atlas
+shows an "install it" link when they do; Safari installs via *File → Add to
+Dock*. Firefox desktop can't install web apps at all (Mozilla removed that in
+Firefox 98) — offline still works there, it just stays a tab. Updates install
+themselves.
 
 **Play it on a plane without installing anything:** [download the single-file
 copy](https://preston-peterson.github.io/escaperoom/labyrinth-below-offline.html)

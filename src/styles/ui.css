@@ -274,8 +274,18 @@
   text-underline-offset: 3px;
 }
 
-.world-offline-note a:hover {
+.world-offline-note a:hover,
+.world-install-link:hover {
   color: var(--amber);
+}
+
+.world-install-link {
+  color: var(--ink-dim);
+  font: inherit;
+  font-style: italic;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0;
 }
 
 /* ===== Game screen ===== */
