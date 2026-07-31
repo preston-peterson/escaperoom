@@ -34,6 +34,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and six new palettes.
 
 ### Fixed
+- Scenes now fit the window instead of being cropped to fill it. On
+  ultrawide monitors the old behaviour cut real interactions off the canvas —
+  on 21:9, four of them, two required to finish a world.
 - The Unfinished Dream's threshold: the lone door's hotspot covered the
   brass knocker (unfindable way in); the knocker now glints and owns the
   door until answered.

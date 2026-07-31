@@ -89,7 +89,12 @@ export function SceneRenderer({
   return (
     <svg
       viewBox={`0 0 ${SCENE_W} ${SCENE_H}`}
-      preserveAspectRatio="xMidYMid slice"
+      // "meet", not "slice": slice crops whatever doesn't fit the window's
+      // aspect, and on a 21:9 monitor that cropped real interactions off the
+      // canvas — including clues the game needs you to find. Fitting the whole
+      // scene costs some background at the edges and guarantees that anything
+      // authored is reachable at any aspect ratio.
+      preserveAspectRatio="xMidYMid meet"
       onPointerMove={onPointerMove}
       style={{
         width: '100%',

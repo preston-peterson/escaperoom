@@ -6,6 +6,14 @@ than expected. In portrait, no — not without redrawing every scene.**
 Today phones get a "come back on a computer" notice. This is what it would
 take to lift it.
 
+> **Update, same day:** the first item below — fitting the scene instead of
+> cropping it — turned out to be a live *desktop* bug too, and has been
+> fixed. On a 21:9 monitor (2560×1080) four hotspots were cropped entirely
+> off the canvas, two of them required by the walkthrough; on 32:9 it was 22,
+> including required pickups. Scenes now use `meet` rather than `slice`, so
+> nothing authored is ever cropped at any aspect ratio. The measurements
+> below describe the state before that change.
+
 ## The measurements
 
 Scenes are authored at 1600×900 and rendered with
