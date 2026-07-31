@@ -32,14 +32,27 @@ export function gateReason(env: GateEnv): GateReason {
 
 export const COARSE_POINTER_QUERY = '(pointer: coarse) and (hover: none)';
 
+/**
+ * `?touch=1` forces the touch layout, `?touch=0` forces the pointer one.
+ * Touch behaviour is otherwise invisible on a development machine, and a
+ * layout you can't look at is a layout you can't trust.
+ */
+function forcedTouch(): boolean | null {
+  if (typeof location === 'undefined') return null;
+  const flag = new URLSearchParams(location.search).get('touch');
+  return flag === '1' ? true : flag === '0' ? false : null;
+}
+
 export function readEnv(): GateEnv {
   if (typeof window === 'undefined') {
     return { coarsePointer: false, width: 1920, height: 1080 };
   }
+  const forced = forcedTouch();
   return {
     coarsePointer:
-      typeof window.matchMedia === 'function' &&
-      window.matchMedia(COARSE_POINTER_QUERY).matches,
+      forced ??
+      (typeof window.matchMedia === 'function' &&
+        window.matchMedia(COARSE_POINTER_QUERY).matches),
     width: window.innerWidth,
     height: window.innerHeight,
   };

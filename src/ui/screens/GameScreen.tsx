@@ -12,7 +12,7 @@ import { JournalPanel } from '../hud/JournalPanel.tsx';
 import { MenuOverlay } from '../hud/MenuOverlay.tsx';
 import { allowMove } from '../moveGuard.ts';
 import { isTouchDevice } from '../mobileGate.ts';
-import { currentExits } from '../../engine/state/selectors.ts';
+import { bearing, currentExits } from '../../engine/state/selectors.ts';
 
 /** Hosts map/scene views, HUD, overlays, and all store→UI side-channel wiring. */
 export function GameScreen() {
@@ -139,17 +139,27 @@ export function GameScreen() {
             be grown without colliding. Named exits sidestep the geometry. */}
         {touch && viewMode === 'map' && (
           <nav className="exits-bar" aria-label="Exits">
-            {currentExits(state).map(({ passage, to }) => (
-              <button
-                key={passage}
-                className="exit-button"
-                onClick={() => {
-                  if (allowMove()) dispatch({ type: 'MOVE', passage, at: Date.now() });
-                }}
-              >
-                {state.visitedRooms[to] ? (world.rooms[to]?.name ?? to) : 'Unexplored'}
-              </button>
-            ))}
+            {currentExits(state).map(({ passage, to }) => {
+              const way = bearing(world, state.currentRoom, to);
+              return (
+                <button
+                  key={passage}
+                  className="exit-button"
+                  onClick={() => {
+                    if (allowMove()) dispatch({ type: 'MOVE', passage, at: Date.now() });
+                  }}
+                >
+                  {state.visitedRooms[to] ? (
+                    (world.rooms[to]?.name ?? to)
+                  ) : (
+                    <>
+                      Unexplored
+                      {way && <span className="exit-bearing">{way}</span>}
+                    </>
+                  )}
+                </button>
+              );
+            })}
           </nav>
         )}
 

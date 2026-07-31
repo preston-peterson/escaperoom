@@ -149,6 +149,35 @@ export function currentExits(state: GameState): { passage: PassageId; to: RoomId
     .map(([id, p]) => ({ passage: id, to: otherEnd(p, room) }));
 }
 
+const COMPASS = [
+  'north',
+  'north-east',
+  'east',
+  'south-east',
+  'south',
+  'south-west',
+  'west',
+  'north-west',
+] as const;
+
+/**
+ * Which way a neighbouring room lies on the map. Unvisited rooms have no name
+ * to show, and a column of buttons all reading "Unexplored" tells the player
+ * nothing — a bearing restores what the map conveys by position.
+ */
+export function bearing(world: WorldDef, from: RoomId, to: RoomId): string | null {
+  const a = world.map.rooms[from];
+  const b = world.map.rooms[to];
+  if (!a || !b) return null;
+  const dx = b.x - a.x;
+  const dy = b.y - a.y; // SVG y grows downward
+  if (dx === 0 && dy === 0) return null;
+  // 0 = north, clockwise
+  const angle = (Math.atan2(dx, -dy) * 180) / Math.PI;
+  const index = Math.round(((angle + 360) % 360) / 45) % 8;
+  return COMPASS[index];
+}
+
 /** Progress summary for HUD / victory screen. */
 export function progress(state: GameState, world: WorldDef) {
   const total = Object.keys(world.puzzles).length;

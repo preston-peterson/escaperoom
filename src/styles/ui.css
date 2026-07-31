@@ -1063,6 +1063,14 @@
   border-top: 1px solid var(--panel-edge);
 }
 
+.exit-bearing {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+
 .exit-button {
   flex: 0 0 auto;
   min-height: 44px;
@@ -1103,12 +1111,44 @@
   border-right: 1px solid var(--panel-edge);
   overflow-y: auto;
   overflow-x: hidden;
-  transition: width 0.22s ease, padding 0.22s ease;
+  /* A grid item defaults to min-height:auto, which lets tall content push the
+     rail past the viewport instead of scrolling inside it. With a full pack
+     and a map full of exits there is easily more here than a phone is tall. */
+  min-height: 0;
+  height: 100%;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--amber) var(--panel);
+  scrollbar-gutter: stable;
+}
+
+/* Phones hide overlay scrollbars until you drag, so draw a standing one:
+   the rail is the only way to reach the menu, and it must look reachable. */
+:root.touch .game-rail::-webkit-scrollbar {
+  width: 6px;
+}
+
+:root.touch .game-rail::-webkit-scrollbar-track {
+  background: var(--panel);
+  border-radius: 3px;
+}
+
+:root.touch .game-rail::-webkit-scrollbar-thumb {
+  background: var(--amber);
+  border-radius: 3px;
+  opacity: 0.8;
+}
+
+/* the rail's own children must be allowed to shrink for the scroll to engage */
+:root.touch .game-rail > * {
+  flex: 0 0 auto;
 }
 
 :root.touch .game-rail--closed {
   width: 2.1rem;
   padding: 0.4rem 0.15rem;
+  overflow: hidden; /* nothing to scroll when only the chevron is showing */
+  scrollbar-gutter: auto;
 }
 
 :root.touch .game-rail--closed .game-header,
@@ -1120,6 +1160,9 @@
 :root.touch .rail-toggle {
   display: block;
   align-self: flex-end;
+  position: sticky; /* stays reachable however far the rail is scrolled */
+  top: 0;
+  z-index: 2;
   min-width: 1.8rem;
   min-height: 2.4rem;
   font-size: 1.3rem;
